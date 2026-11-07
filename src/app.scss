@@ -1,0 +1,586 @@
+/* ─── App Shell ─── */
+$void: #0a0a0f;
+$deep: #12121a;
+$surface: #1a1a2e;
+$surface-bright: #24243a;
+$border: #2a2a45;
+$border-bright: #3a3a5e;
+$text-primary: #e8e6f0;
+$text-secondary: #9a96b0;
+$text-muted: #6a6680;
+$accent-cyan: #00d4ff;
+$accent-violet: #8b5cf6;
+$accent-rose: #f43f5e;
+$prime-gold: #fbbf24;
+$composite-blue: #3b82f6;
+$spin-up: #22d3ee;
+$spin-down: #f472b6;
+$accent-emerald: #10b981;
+
+@mixin glass($opacity: 0.08) {
+  background: rgba($surface, $opacity);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(white, 0.06);
+}
+
+@mixin glow($color, $spread: 30px) {
+  box-shadow: 0 0 $spread rgba($color, 0.15),
+              0 0 ($spread * 2) rgba($color, 0.05);
+}
+
+/* ─── Root Layout ─── */
+:root {
+  color-scheme: dark;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 212, 255, 0.45);
+  }
+}
+
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: $void;
+  color: $text-primary;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+  height: 100%;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Top Nav ─── */
+.top-nav {
+  @include glass(0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid rgba(white, 0.04);
+  z-index: 50;
+  flex-shrink: 0;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .logo-glyph {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, $accent-cyan, $accent-violet);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: $text-primary;
+
+      span {
+        color: $text-muted;
+        font-weight: 400;
+      }
+    }
+  }
+
+  &__modes {
+    display: flex;
+    gap: 2px;
+    background: rgba(white, 0.03);
+    border-radius: 10px;
+    padding: 3px;
+
+    button {
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: $text-muted;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      white-space: nowrap;
+
+      &:hover {
+        color: $text-secondary;
+        background: rgba(white, 0.04);
+      }
+
+      &.active {
+        background: rgba($accent-cyan, 0.12);
+        color: $accent-cyan;
+        box-shadow: 0 0 12px rgba($accent-cyan, 0.1);
+      }
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+
+      .mode-icon {
+        margin-right: 0.4rem;
+      }
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: $text-muted;
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $accent-emerald;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Main Content ─── */
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ─── Side Panel ─── */
+.side-panel {
+  width: 320px;
+  flex-shrink: 0;
+  @include glass(0.3);
+  border-right: 1px solid rgba(white, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(white, 0.1);
+    border-radius: 4px;
+  }
+
+  &__section {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(white, 0.04);
+
+    h3 {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: $text-muted;
+      margin-bottom: 0.75rem;
+    }
+  }
+}
+
+/* ─── Number Input ─── */
+.number-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__field {
+    flex: 1;
+    background: rgba(white, 0.04);
+    border: 1px solid rgba(white, 0.08);
+    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+    color: $text-primary;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: rgba($accent-cyan, 0.4);
+      box-shadow: 0 0 16px rgba($accent-cyan, 0.1);
+    }
+  }
+
+  &__arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    button {
+      width: 28px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid rgba(white, 0.08);
+      background: rgba(white, 0.03);
+      color: $text-muted;
+      font-size: 0.65rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.15s;
+
+      &:hover {
+        background: rgba($accent-cyan, 0.12);
+        color: $accent-cyan;
+        border-color: rgba($accent-cyan, 0.3);
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+  }
+}
+
+/* ─── Info Cards ─── */
+.info-card {
+  background: rgba(white, 0.02);
+  border: 1px solid rgba(white, 0.05);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(white, 0.04);
+    border-color: rgba(white, 0.08);
+  }
+
+  &__label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+    margin-bottom: 0.35rem;
+  }
+
+  &__value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    &.prime { color: $prime-gold; }
+    &.composite { color: $composite-blue; }
+    &.complex { color: $accent-violet; }
+  }
+
+  &__sub {
+    font-size: 0.7rem;
+    color: $text-muted;
+    margin-top: 0.25rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* ─── Divisor Tags ─── */
+.divisor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .divisor-tag {
+    padding: 0.25rem 0.55rem;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(white, 0.06);
+    background: rgba(white, 0.03);
+    color: $text-secondary;
+    cursor: default;
+    transition: all 0.2s;
+
+    &.is-prime {
+      border-color: rgba($prime-gold, 0.25);
+      color: $prime-gold;
+      background: rgba($prime-gold, 0.06);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      border-color: rgba(white, 0.15);
+    }
+  }
+}
+
+/* ─── Canvas Area ─── */
+.canvas-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba($accent-cyan, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba($accent-violet, 0.03) 0%, transparent 60%),
+    $void;
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* ─── Canvas Overlay HUD ─── */
+.canvas-hud {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+
+  &__chip {
+    @include glass(0.5);
+    border-radius: 8px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+
+    .chip-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+
+      &.cyan { background: $accent-cyan; }
+      &.violet { background: $accent-violet; }
+      &.gold { background: $prime-gold; }
+      &.rose { background: $accent-rose; }
+      &.emerald { background: $accent-emerald; }
+    }
+
+    .chip-label { color: $text-muted; }
+    .chip-value { margin-left: auto; color: $text-primary; font-weight: 600; }
+  }
+}
+
+/* ─── Canvas Legend ─── */
+.canvas-legend {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  @include glass(0.4);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  gap: 1.25rem;
+  z-index: 10;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    color: $text-muted;
+    font-weight: 500;
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+  }
+}
+
+/* ─── Toggle Buttons ─── */
+.toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  .toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid rgba(white, 0.05);
+    background: rgba(white, 0.02);
+    color: $text-secondary;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+
+    .toggle-indicator {
+      width: 30px;
+      height: 16px;
+      border-radius: 8px;
+      background: rgba(white, 0.1);
+      position: relative;
+      transition: all 0.25s;
+      flex-shrink: 0;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        top: 2px;
+        left: 2px;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+
+    &.active {
+      border-color: rgba($accent-cyan, 0.2);
+      background: rgba($accent-cyan, 0.05);
+
+      .toggle-indicator {
+        background: $accent-cyan;
+
+        &::after {
+          left: 16px;
+        }
+      }
+    }
+  }
+}
+
+/* ─── Tooltip ─── */
+.tooltip {
+  position: absolute;
+  @include glass(0.8);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 260px;
+  @include glow($accent-cyan, 15px);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &__title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.7rem;
+
+    .row-label { color: $text-muted; }
+    .row-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+  }
+}
+
+/* ─── Spin Indicator (complex plane quadrant) ─── */
+.spin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  .spin-arrow {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.up {
+    color: $spin-up;
+    .spin-arrow { transform: rotate(0deg); }
+  }
+
+  &.down {
+    color: $spin-down;
+    .spin-arrow { transform: rotate(180deg); }
+  }
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

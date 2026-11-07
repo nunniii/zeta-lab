@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─── */
+@theme {
+  --color-void: #0a0a0f;
+  --color-deep: #12121a;
+  --color-surface: #1a1a2e;
+  --color-surface-bright: #24243a;
+  --color-border: #2a2a45;
+  --color-border-bright: #3a3a5e;
+  --color-text-primary: #e8e6f0;
+  --color-text-secondary: #9a96b0;
+  --color-text-muted: #6a6680;
+  --color-accent-cyan: #00d4ff;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-rose: #f43f5e;
+  --color-accent-amber: #f59e0b;
+  --color-accent-emerald: #10b981;
+  --color-prime-gold: #fbbf24;
+  --color-composite-blue: #3b82f6;
+  --color-spin-up: #22d3ee;
+  --color-spin-down: #f472b6;
+
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+}
+
+/* ─── Global Dark Theme & Smooth Scrollbars ─── */
+:root {
+  color-scheme: dark;
+}
+
+/* Standard scrollbar for Firefox & modern Chromium (121+) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+/* WebKit / Blink scrollbar (Chrome, Edge, Safari, Opera) */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.5); /* Sutil brilho ciano ao passar o mouse */
+}
+
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ─── KaTeX Visual Adjustments ─── */
+.katex-display {
+  margin: 0.35rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0;
+}
+
+.katex {
+  font-size: 1.05em;
+  text-rendering: geometricPrecision;
+}
+
+.katex-display > .katex {
+  white-space: normal;
+  text-align: center;
+}
